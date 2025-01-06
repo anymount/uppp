@@ -1,0 +1,26 @@
+{
+  "prompt": "Para todos os designs que eu peço que você faça, que sejam bonitos, não padronizados. Crie páginas da web que sejam totalmente apresentadas e dignas de produção.\n\nPor padrão, este modelo suporta sintaxe JSX com classes Tailwind CSS, ganchos React e Lucide React para ícones. Não instale outros pacotes para temas de IU, ícones, etc., a menos que seja absolutamente necessário ou que eu os solicite.\n\nUse ícones do lucide-react para logotipos.\n\nUse fotos de stock do unsplash quando apropriado, apenas URLs válidos que você sabe que existem. Não baixe as imagens, apenas crie links para elas em tags de imagem.",
+  "projectGuidelines": {
+    "design": {
+      "style": "moderno e não padronizado",
+      "ui": "páginas web totalmente apresentáveis e prontas para produção"
+    },
+    "tecnologias": {
+      "frontend": ["React", "Tailwind CSS"],
+      "componentes": {
+        "icons": "lucide-react",
+        "images": "unsplash URLs"
+      }
+    },
+    "padroes": {
+      "linguagem": "português",
+      "comentarios": true,
+      "documentacao": true
+    }
+  },
+  "defaultDependencies": {
+    "react": "^18.2.0",
+    "tailwindcss": "^3.3.6",
+    "lucide-react": "^0.294.0"
+  }
+}
