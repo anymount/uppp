@@ -35,7 +35,7 @@ export default function Home() {
           <div className="flex items-center flex-1 justify-center md:justify-start">
             <a className="flex items-center">
               <img
-                src="../../logo.webp"
+                src="/logo.webp"
                 alt="Logo"
                 className="w-16 h-auto rounded-[12px]"
               />
@@ -49,7 +49,7 @@ export default function Home() {
             <button
               onClick={() => {
                 Router.push(
-                  'https://discord.com/oauth2/authorize?client_id=1208525304663122021&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fdiscord%2Fcallback&scope=email+identify'
+                  'https://discord.com/oauth2/authorize?client_id=1208525304663122021&response_type=code&redirect_uri=https%3A%2F%2Fpecinhas.shop%2Fapi%2Fauth%2Fdiscord%2Fcallback&scope=email+identify'
                 );
               }}
               className="flex items-center text-white rounded-full border border-zinc-600 px-6 py-3 text-lg hover:bg-white hover:text-[#262d34] transition-colors"
