@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="flex flex-col gap-3 lg:max-w-sm">
           <div className="flex items-center gap-2 rounded-full">
             <img
-              src="../../logo.webp"
+              src="/logo.webp"
               alt="8m"
               className="h-12 rounded-[10px]"
             />
