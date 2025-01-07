@@ -6,15 +6,19 @@
 # testing
 /coverage
 
+<<<<<<< HEAD
 # next.js
 /.next/
 /out/
 
+=======
+>>>>>>> 12bb4c97afb245a8d614b2bc9290846c62092f32
 # production
 /build
 
 # misc
 .DS_Store
+<<<<<<< HEAD
 *.pem
 
 # debug
@@ -24,14 +28,22 @@ yarn-error.log*
 
 # local env files
 .env
+=======
+>>>>>>> 12bb4c97afb245a8d614b2bc9290846c62092f32
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+<<<<<<< HEAD
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+=======
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+>>>>>>> 12bb4c97afb245a8d614b2bc9290846c62092f32
