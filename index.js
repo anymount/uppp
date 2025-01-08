@@ -63,14 +63,24 @@ const verifyRoutes = require('./src/website/routes/verify');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages
+        GatewayIntentBits.MessageContent
     ]
 });
 
+client.commands = new Collection();
+const commandsPath = path.join(__dirname, 'src/commands/slash');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const command = require(path.join(commandsPath, file));
+    client.commands.set(command.data.name, command);
+    log('info', `Comando carregado: ${command.data.name}`);
+}
+
 client.on('ready', () => {
-    log('success', `Bot iniciado como ${client.user.tag}`);
-    log('info', `Presente em ${client.guilds.cache.size} servidores`);
+    log('success', `Bot online como ${client.user.tag}`);
 });
 
 client.on('guildCreate', guild => {
@@ -85,7 +95,23 @@ client.on('error', error => {
     log('error', `Erro no bot: ${error.message}`);
 });
 
-client.commands = new Collection();
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+        log('info', `Comando ${interaction.commandName} executado por ${interaction.user.tag}`);
+    } catch (error) {
+        log('error', `Erro ao executar comando ${interaction.commandName}: ${error}`);
+        await interaction.reply({ 
+            content: 'Houve um erro ao executar este comando!', 
+            ephemeral: true 
+        }).catch(console.error);
+    }
+});
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -124,13 +150,6 @@ for (const file of eventFiles) {
     }
 }
 
-const commandFiles = fs.readdirSync('./src/commands/slash').filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-    const command = require(`./src/commands/slash/${file}`);
-    client.commands.set(command.data.name, command);
-}
-
 app.locals.client = client;
 
 const PORT = process.env.PORT || 3000;
@@ -138,27 +157,9 @@ app.listen(PORT, () => {
     log('success', `Website rodando na porta ${PORT}`);
 });
 
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
-
-    const command = client.commands.get(interaction.commandName);
-    if (!command) return;
-
-    try {
-        log('info', `Comando ${interaction.commandName} usado por ${interaction.user.tag}`);
-        await command.execute(interaction);
-    } catch (error) {
-        log('error', `Erro ao executar comando ${interaction.commandName}: ${error.message}`);
-        await interaction.reply({
-            content: 'Houve um erro ao executar este comando!',
-            ephemeral: true
-        });
-    }
+client.login(process.env.BOT_TOKEN).catch(error => {
+    log('error', `Erro ao fazer login do bot: ${error}`);
 });
-
-client.login(process.env.BOT_TOKEN)
-    .then(() => log('success', 'Bot conectado ao Discord'))
-    .catch(error => log('error', `Erro ao conectar bot: ${error.message}`));
 
 process.on('unhandledRejection', error => {
     log('error', `Erro não tratado: ${error.message}`);
@@ -166,4 +167,4 @@ process.on('unhandledRejection', error => {
 
 process.on('uncaughtException', error => {
     log('error', `Exceção não capturada: ${error.message}`);
-}); 
+});
