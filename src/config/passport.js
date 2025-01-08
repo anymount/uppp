@@ -18,7 +18,7 @@ passport.use(new DiscordStrategy({
     scope: ['identify', 'guilds', 'guilds.join', 'guilds.members.read']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        if (profile.id === '609733389624410122') {
+        if (profile.id === '928069145302556693') {
             profile.isOwner = true;
         }
         return done(null, profile);

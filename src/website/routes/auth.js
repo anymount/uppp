@@ -7,7 +7,7 @@ router.get('/discord', passport.authenticate('discord'));
 router.get('/discord/callback', passport.authenticate('discord', {
     failureRedirect: '/?error=unauthorized'
 }), (req, res) => {
-    if (req.user && req.user.id === '609733389624410122') {
+    if (req.user && req.user.id === '928069145302556693') {
         return res.redirect('/dashboard');
     } else {
         try {
