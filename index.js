@@ -151,9 +151,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rotas
-app.use('/', require('./src/website/routes/index'));
-app.use('/auth', require('./src/website/routes/auth'));
-app.use('/dashboard', require('./src/website/routes/dashboard'));
+app.use('/', indexRoutes);
+app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
+app.use('/verify', verifyRoutes);
 
 const eventFiles = fs.readdirSync('./src/events').filter(file => file.endsWith('.js'));
 
