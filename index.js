@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const express = require('express');
 const session = require('express-session');
+const MemoryStore = session.MemoryStore;
 const passport = require('passport');
 const path = require('path');
 const fs = require('fs');
@@ -120,17 +121,25 @@ app.set('views', path.join(__dirname, 'src/website/views'));
 app.use(express.static(path.join(__dirname, 'src/website/public')));
 
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 60000 * 60 * 24
-    }
+        maxAge: 60000 * 60 * 24 // 24 horas
+    },
+    store: new MemoryStore({
+        checkPeriod: 86400000 // 24 horas
+    })
 }));
 
 require('./src/config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
