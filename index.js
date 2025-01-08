@@ -153,18 +153,37 @@ for (const file of eventFiles) {
 app.locals.client = client;
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+
+// Primeiro inicia o servidor web
+const server = app.listen(PORT, '0.0.0.0', () => {
     log('success', `Website rodando na porta ${PORT}`);
 });
 
-client.login(process.env.BOT_TOKEN).catch(error => {
-    log('error', `Erro ao fazer login do bot: ${error}`);
-});
+// Depois conecta o bot
+client.login(process.env.BOT_TOKEN)
+    .then(() => {
+        log('success', `Bot conectado como ${client.user.tag}`);
+    })
+    .catch(error => {
+        log('error', `Erro ao conectar bot: ${error}`);
+    });
 
+// Tratamento de erros do processo
 process.on('unhandledRejection', error => {
-    log('error', `Erro não tratado: ${error.message}`);
+    log('error', `Erro não tratado: ${error}`);
 });
 
 process.on('uncaughtException', error => {
-    log('error', `Exceção não capturada: ${error.message}`);
+    log('error', `Exceção não capturada: ${error}`);
+});
+
+// Tratamento de desligamento gracioso
+process.on('SIGTERM', () => {
+    log('info', 'Recebido sinal SIGTERM. Iniciando desligamento gracioso...');
+    server.close(() => {
+        log('info', 'Servidor HTTP fechado.');
+        client.destroy();
+        log('info', 'Cliente Discord desconectado.');
+        process.exit(0);
+    });
 });
