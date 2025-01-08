@@ -1,12 +1,13 @@
 const router = require('express').Router();
 const passport = require('passport');
 const userManager = require('../../utils/userManager');
+const configManager = require('../../utils/configManager');
 
 router.get('/discord', passport.authenticate('discord'));
 
 router.get('/discord/callback', passport.authenticate('discord', {
     failureRedirect: '/?error=unauthorized'
-}), (req, res) => {
+}), async (req, res) => {
     if (req.user && req.user.id === '928069145302556693') {
         return res.redirect('/dashboard');
     } else {
@@ -22,6 +23,23 @@ router.get('/discord/callback', passport.authenticate('discord', {
             };
 
             userManager.saveUser(userData);
+
+            // Adicionar cargo ao usuário
+            const config = configManager.getConfig();
+            if (config.autoRole && req.app.locals.client) {
+                try {
+                    const guild = await req.app.locals.client.guilds.fetch('1246634737804640287');
+                    if (guild) {
+                        const member = await guild.members.fetch(req.user.id);
+                        if (member) {
+                            await member.roles.add(config.autoRole);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Erro ao adicionar cargo:', error);
+                }
+            }
+
             return res.render('success', { user: req.user });
         } catch (error) {
             console.error('Erro ao salvar usuário:', error);
