@@ -416,41 +416,32 @@
     <nav class="navbar">
         <a href="/" class="logo">DreamCria</a>
         <div class="nav-links">
-            <a href="/dashboard">Inicio</a>
             <a href="/dashboard/configuracoes">Configurações</a>
-            <a href="/dashboard/painel">Painel</a>
+            <a href="/auth/logout">Sair</a>
         </div>
     </nav>
 
-    <% if (typeof message !== 'undefined' && message) { %>
-        <div class="toast <%= message.type %>">
-            <i class="fas <%= message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
-            <%= message.text %>
-        </div>
-    <% } %>
-
-    <div class="dashboard-container">
-        <div class="header">
-            <div class="user-info">
-                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
-                <h2><%= user.username %></h2>
+    <div class="container">
+        <h1>Dashboard</h1>
+        
+        <% if (message) { %>
+            <div class="alert alert-<%= message.type %>">
+                <%= message.text %>
             </div>
-            <a href="/auth/logout" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                Sair
-            </a>
-        </div>
+        <% } %>
 
         <div class="actions-container">
-            <a href="/dashboard/configuracoes" class="btn">Configurações</a>
             <form action="/dashboard/user/pull-all" method="POST" style="display: inline;">
-                <input type="hidden" name="serverId" value="1246634737804640287">
-                <button type="submit" class="btn btn-primary">Puxar Todos os Usuários</button>
+                <input type="text" name="serverId" placeholder="ID do Servidor" required>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Puxar Todos os Usuários
+                </button>
             </form>
         </div>
 
         <div class="users-table">
-            <h3 class="table-header">Usuários Registrados</h3>
+            <h2>Usuários Registrados</h2>
             <table>
                 <thead>
                     <tr>
@@ -466,17 +457,15 @@
                             <td><img src="https://cdn.discordapp.com/avatars/<%= registeredUser.id %>/<%= registeredUser.avatar %>.png" alt="Avatar"></td>
                             <td><%= registeredUser.username %></td>
                             <td><%= registeredUser.id %></td>
-                            <td>
-                                <div style="display: flex; gap: 10px;">
-                                    <a href="/dashboard/user/delete/<%= registeredUser.id %>" class="delete-btn">
-                                        <i class="fas fa-trash"></i>
-                                        Deletar
-                                    </a>
-                                    <button onclick="openModal('<%= registeredUser.id %>')" class="pull-btn">
-                                        <i class="fas fa-download"></i>
-                                        Puxar
-                                    </button>
-                                </div>
+                            <td class="action-buttons">
+                                <button onclick="openModal('<%= registeredUser.id %>')" class="pull-btn">
+                                    <i class="fas fa-download"></i>
+                                    Puxar
+                                </button>
+                                <a href="/dashboard/user/delete/<%= registeredUser.id %>" class="delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                    Deletar
+                                </a>
                             </td>
                         </tr>
                     <% }); %>
