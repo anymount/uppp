@@ -223,6 +223,42 @@
             transform: translateY(-2px);
         }
 
+        .actions-container {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(138, 43, 226, 0.2);
+            color: #fff;
+        }
+
+        .btn:hover {
+            background: rgba(138, 43, 226, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #8a2be2, #4b0082);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #9b4deb, #5c1a99);
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 10px;
@@ -405,6 +441,14 @@
             </a>
         </div>
 
+        <div class="actions-container">
+            <a href="/dashboard/configuracoes" class="btn">Configurações</a>
+            <form action="/dashboard/user/pull-all" method="POST" style="display: inline;">
+                <input type="hidden" name="serverId" value="1246634737804640287">
+                <button type="submit" class="btn btn-primary">Puxar Todos os Usuários</button>
+            </form>
+        </div>
+
         <div class="users-table">
             <h3 class="table-header">Usuários Registrados</h3>
             <table>
@@ -475,4 +519,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
