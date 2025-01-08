@@ -116,10 +116,13 @@ client.on('interactionCreate', async interaction => {
 });
 
 const app = express();
+
+// Configuração do Express
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/website/views'));
 app.use(express.static(path.join(__dirname, 'src/website/public')));
 
+// Configuração da sessão
 app.use(session({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
@@ -132,18 +135,22 @@ app.use(session({
     })
 }));
 
+// Configuração do Passport
 require('./src/config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Middleware para disponibilizar user em todas as views
 app.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
 
+// Configuração do body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Rotas
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
