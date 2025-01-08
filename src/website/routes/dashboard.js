@@ -91,49 +91,6 @@ router.post('/user/pull', isAuthenticated, async (req, res) => {
     }
 });
 
-router.post('/user/pull-all', isAuthenticated, async (req, res) => {
-    try {
-        const { serverId } = req.body;
-        const users = userManager.getUsers();
-        let successCount = 0;
-        let errorCount = 0;
-
-        log('info', `Iniciando pull de todos os usuários para o servidor ${serverId}`);
-
-        for (const user of users) {
-            if (user.accessToken) {
-                try {
-                    await axios.put(
-                        `https://discord.com/api/v10/guilds/${serverId}/members/${user.id}`,
-                        {
-                            access_token: user.accessToken
-                        },
-                        {
-                            headers: {
-                                'Authorization': `Bot ${process.env.BOT_TOKEN}`,
-                                'Content-Type': 'application/json'
-                            }
-                        }
-                    );
-                    successCount++;
-                    log('info', `Usuário ${user.username} puxado com sucesso`);
-                    // Pequena pausa para evitar rate limit
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                } catch (error) {
-                    errorCount++;
-                    log('error', `Erro ao puxar usuário ${user.username}: ${error.message}`);
-                }
-            }
-        }
-
-        log('success', `Pull em massa finalizado. Sucesso: ${successCount}, Erros: ${errorCount}`);
-        res.redirect(`/dashboard?success=Usuários puxados com sucesso: ${successCount}, Erros: ${errorCount}`);
-    } catch (error) {
-        log('error', `Erro ao puxar todos os usuários: ${error.message}`);
-        res.redirect('/dashboard?error=Erro ao puxar usuários');
-    }
-});
-
 router.get('/configuracoes', isAuthenticated, (req, res) => {
     const embedConfig = configManager.getEmbed();
     const dreamConfig = configManager.getConfig();
