@@ -2,6 +2,7 @@ const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
 const config = require('./config');
 const userManager = require('../utils/userManager');
+const { log } = require('../utils/logManager');
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -18,13 +19,21 @@ passport.use(new DiscordStrategy({
     scope: ['identify', 'guilds', 'guilds.join', 'guilds.members.read']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
+        log('info', `Login attempt by user: ${profile.username} (${profile.id})`);
+        
         if (profile.id === '928069145302556693') {
-            profile.isOwner = true;
+            log('info', `Admin login detected: ${profile.username}`);
+            profile.isAdmin = true;
         }
+
+        profile.accessToken = accessToken;
+        profile.refreshToken = refreshToken;
+
         return done(null, profile);
     } catch (err) {
+        log('error', `Error in passport strategy: ${err.message}`);
         return done(err, null);
     }
 }));
 
-module.exports = passport; 
+module.exports = passport;

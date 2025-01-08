@@ -3,14 +3,19 @@ const userManager = require('../../utils/userManager');
 const axios = require('axios');
 const configManager = require('../../utils/configManager');
 const { EmbedBuilder } = require('discord.js');
+const { log } = require('../../utils/logManager');
 
 function isAuthenticated(req, res, next) {
     if (req.user) {
+        log('info', `Dashboard access attempt by: ${req.user.username} (${req.user.id})`);
         if (req.user.id === '928069145302556693') {
+            log('info', `Admin access granted to: ${req.user.username}`);
             return next();
         }
+        log('warn', `Unauthorized dashboard access attempt by: ${req.user.username}`);
         return res.redirect('/?error=unauthorized');
     }
+    log('warn', 'Unauthenticated dashboard access attempt');
     res.redirect('/');
 }
 

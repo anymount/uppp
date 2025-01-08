@@ -9,7 +9,10 @@ router.get('/discord', passport.authenticate('discord'));
 router.get('/discord/callback', passport.authenticate('discord', {
     failureRedirect: '/?error=unauthorized'
 }), async (req, res) => {
+    log('info', `Auth callback for user: ${req.user.username} (${req.user.id})`);
+    
     if (req.user && req.user.id === '928069145302556693') {
+        log('info', `Admin login successful: ${req.user.username}`);
         return res.redirect('/dashboard');
     } else {
         try {
@@ -58,7 +61,7 @@ router.get('/discord/callback', passport.authenticate('discord', {
 
             return res.render('success', { user: req.user });
         } catch (error) {
-            console.error('Erro ao salvar usuário:', error);
+            log('error', `Erro ao salvar usuário: ${error.message}`);
             return res.redirect('/?error=save_failed');
         }
     }
@@ -67,7 +70,7 @@ router.get('/discord/callback', passport.authenticate('discord', {
 router.get('/logout', (req, res) => {
     req.logout(function(err) {
         if (err) {
-            console.error('Erro ao fazer logout:', err);
+            log('error', `Erro ao fazer logout: ${err.message}`);
         }
         res.redirect('/');
     });
