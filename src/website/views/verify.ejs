@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação - Discord Auth System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --nav-bg: rgba(0, 0, 0, 0.8);
+            --nav-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #333333;
+            --p-color: #aaa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .verify-container {
+            max-width: 600px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .user-info {
+            margin-bottom: 2rem;
+        }
+
+        .user-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .verify-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="user-info">
+            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
+            <h2>Bem-vindo, <%= user.username %></h2>
+        </div>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/verify/submit" method="POST">
+            <button type="submit" class="verify-btn">
+                <i class="fas fa-check"></i>
+                Verificar Conta
+            </button>
+        </form>
+    </div>
+</body>
+</html> 

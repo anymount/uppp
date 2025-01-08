@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Concluído - Discord Auth System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --nav-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-container {
+            max-width: 600px;
+            margin: 20px;
+            padding: 2rem;
+            background: #000000;
+            border: 1px solid var(--nav-border);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .user-info {
+            margin: 2rem 0;
+        }
+
+        .user-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        .discord-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #5865F2;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--nav-border);
+            transition: all 0.3s ease;
+        }
+
+        .discord-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <i class="fas fa-check-circle success-icon"></i>
+        <div class="user-info">
+            <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
+            <h2>Parabéns, <%= user.username %>!</h2>
+        </div>
+        <p>Seu registro foi concluído com sucesso.</p>
+        <a href="https://discord.com/channels/@me" class="discord-btn">
+            <i class="fab fa-discord"></i>
+            Voltar para o Discord
+        </a>
+    </div>
+</body>
+</html> 

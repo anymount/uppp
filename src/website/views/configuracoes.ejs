@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Discord Auth System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --nav-bg: rgba(0, 0, 0, 0.8);
+            --nav-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #333333;
+            --p-color: #aaa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--nav-border);
+            position: fixed;
+            width: 90%;
+            max-width: 1200px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-radius: 15px;
+        }
+
+        .navbar:hover {
+            background: var(--nav-bg);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            background: linear-gradient(45deg, #8a2be2, #4b0082);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(138, 43, 226, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #5865F2;
+        }
+
+        .user-info h2 {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #bb2d3b;
+            transform: translateY(-2px);
+        }
+
+        .users-table {
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .table-header {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        th {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            background: #000000;
+            padding: 12px;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        tr td:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        tr td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        td img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #bb2d3b;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+                margin: 20px auto;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .user-info {
+                flex-direction: column;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            color: #666;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #111;
+            color: #fff;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pull-btn {
+            background: #5865F2;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pull-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .confirm-btn {
+            background: #2ecc71;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #e74c3c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast.success {
+            background: #2ecc71;
+        }
+
+        .toast.error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        .config-section {
+            background: #000000;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .config-title {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background: #5865F2;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .preview-embed {
+            background: #313338;
+            border-radius: 0;
+            padding: 0.5rem 1rem;
+            margin-top: 8px;
+            max-width: 520px;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .preview-bot-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .preview-bot-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-bot-name-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .preview-bot-name {
+            color: #f2f3f5;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .preview-timestamp {
+            color: #949ba4;
+            font-size: 0.75rem;
+            margin-left: 4px;
+        }
+
+        .preview-content {
+            margin: 8px 0 0 0;
+            background: #2B2D31;
+            border-radius: 4px;
+            border-left: 4px solid #5865F2;
+            padding: 12px;
+        }
+
+        .preview-bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-top: 4px;
+        }
+
+        .preview-bot-tag {
+            background: #5865F2;
+            color: white;
+            font-size: 0.68rem;
+            padding: 0.12rem 0.27rem;
+            border-radius: 3px;
+            margin-left: 4px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .preview-title {
+            color: #f2f3f5;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .preview-description {
+            color: #dbdee1;
+            font-size: 0.937rem;
+            line-height: 1.3;
+            white-space: pre-wrap;
+            margin-bottom: 8px;
+        }
+
+        .preview-footer {
+            color: #949ba4;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+
+        .preview-message {
+            background: #313338;
+            padding: 0.5rem 1rem;
+            max-width: 600px;
+        }
+
+        .preview-message-content {
+            flex: 1;
+        }
+
+        .preview-embed-content {
+            margin-left: 0;
+            background: #2B2D31;
+            border-radius: 4px;
+            border-left: 4px solid #5865F2;
+            padding: 12px;
+        }
+
+        .preview-title {
+            color: #f2f3f5;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .preview-description {
+            color: #dbdee1;
+            font-size: 0.937rem;
+            line-height: 1.3;
+            white-space: pre-wrap;
+        }
+
+        .preview-footer {
+            color: #949ba4;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">DreamCria</a>
+        <div class="nav-links">
+            <a href="/dashboard">Inicio</a>
+            <a href="/dashboard/configuracoes">Configurações</a>
+            <a href="/dashboard/painel">Painel</a>
+        </div>
+    </nav>
+
+    <% if (typeof message !== 'undefined' && message) { %>
+        <div class="toast <%= message.type %>">
+            <i class="fas <%= message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle' %>"></i>
+            <%= message.text %>
+        </div>
+    <% } %>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="user-info">
+                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
+                <h2><%= user.username %></h2>
+            </div>
+            <a href="/auth/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+            </a>
+        </div>
+
+        <form action="/dashboard/configuracoes/save" method="POST">
+            <div class="config-section">
+                <h3 class="config-title">Configurações do Bot</h3>
+                
+                <div class="form-group">
+                    <label>Cargo Automático</label>
+                    <input type="text" name="autoRole" value="<%= dreamConfig.autoRole %>" placeholder="ID do Cargo">
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3 class="config-title">Configurações do Embed</h3>
+                
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" name="embedTitle" value="<%= embedConfig.title %>">
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea name="embedDescription"><%= embedConfig.description %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Cor (HEX)</label>
+                    <input type="text" name="embedColor" value="<%= embedConfig.color %>">
+                </div>
+
+                <div class="form-group">
+                    <label>Rodapé</label>
+                    <input type="text" name="embedFooter" value="<%= embedConfig.footer %>">
+                </div>
+
+                <div class="form-group">
+                    <label>Texto do Botão</label>
+                    <input type="text" name="buttonLabel" value="<%= embedConfig.buttonLabel %>">
+                </div>
+
+                <div class="form-group">
+                    <label>Emoji do Botão</label>
+                    <input type="text" name="buttonEmoji" value="<%= embedConfig.buttonEmoji %>">
+                </div>
+
+                <div class="preview-message">
+                    <div class="preview-header">
+                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="preview-bot-avatar" alt="Bot Avatar">
+                        <div class="preview-message-content">
+                            <div class="preview-bot-name-row">
+                                <span class="preview-bot-name">DreamCria</span>
+                                <span class="preview-bot-tag">APP</span>
+                                <span class="preview-timestamp">Today at <span id="current-time">2:46 PM</span></span>
+                            </div>
+                            <div class="preview-embed-content">
+                                <div class="preview-title"><%= embedConfig.title %></div>
+                                <div class="preview-description"><%= embedConfig.description %></div>
+                                <div class="preview-footer"><%= embedConfig.footer %></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="save-btn">
+                <i class="fas fa-save"></i>
+                Salvar Configurações
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('input[name^="embed"], textarea[name^="embed"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        function updatePreview() {
+            const title = document.querySelector('input[name="embedTitle"]').value;
+            const description = document.querySelector('textarea[name="embedDescription"]').value;
+            const footer = document.querySelector('input[name="embedFooter"]').value;
+            const color = document.querySelector('input[name="embedColor"]').value;
+
+            document.querySelector('.preview-title').textContent = title;
+            document.querySelector('.preview-description').textContent = description;
+            document.querySelector('.preview-footer').textContent = footer;
+            document.querySelector('.preview-embed').style.borderLeftColor = color;
+        }
+
+        document.querySelector('input[name="embedColor"]').addEventListener('input', updatePreview);
+
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            document.getElementById('current-time').textContent = `${hours}:${minutes} ${ampm}`;
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html> 
