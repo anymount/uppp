@@ -2,6 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const userManager = require('../../utils/userManager');
 const configManager = require('../../utils/configManager');
+const { log } = require('../../utils/logManager');
 
 router.get('/discord', passport.authenticate('discord'));
 
@@ -26,18 +27,33 @@ router.get('/discord/callback', passport.authenticate('discord', {
 
             // Adicionar cargo ao usuário
             const config = configManager.getConfig();
+            log('info', `Tentando adicionar cargo. Config: ${JSON.stringify(config)}`);
+            
             if (config.autoRole && req.app.locals.client) {
                 try {
+                    log('info', `Buscando servidor Discord...`);
                     const guild = await req.app.locals.client.guilds.fetch('1246634737804640287');
+                    
                     if (guild) {
+                        log('info', `Servidor encontrado. Buscando membro...`);
                         const member = await guild.members.fetch(req.user.id);
+                        
                         if (member) {
+                            log('info', `Membro encontrado. Adicionando cargo ${config.autoRole}...`);
                             await member.roles.add(config.autoRole);
+                            log('success', `Cargo adicionado com sucesso!`);
+                        } else {
+                            log('error', 'Membro não encontrado no servidor');
                         }
+                    } else {
+                        log('error', 'Servidor não encontrado');
                     }
                 } catch (error) {
-                    console.error('Erro ao adicionar cargo:', error);
+                    log('error', `Erro ao adicionar cargo: ${error.message}`);
+                    console.error('Erro completo:', error);
                 }
+            } else {
+                log('info', `Cargo não configurado ou cliente não disponível. autoRole: ${config.autoRole}, client: ${!!req.app.locals.client}`);
             }
 
             return res.render('success', { user: req.user });
