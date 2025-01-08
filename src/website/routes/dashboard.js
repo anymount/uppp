@@ -21,7 +21,9 @@ function isAuthenticated(req, res, next) {
 
 router.get('/', isAuthenticated, async (req, res) => {
     try {
+        log('info', 'Carregando dashboard...');
         const registeredUsers = userManager.getUsers();
+        log('info', `Total de usuários registrados: ${registeredUsers.length}`);
         
         let message;
         if (req.query.success === 'user_pulled') {
@@ -36,13 +38,14 @@ router.get('/', isAuthenticated, async (req, res) => {
             };
         }
         
+        log('info', 'Renderizando dashboard...');
         res.render('dashboard', {
             user: req.user,
             registeredUsers: registeredUsers,
             message: message
         });
     } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
+        log('error', `Erro ao carregar dashboard: ${error.message}`);
         res.status(500).send('Erro ao carregar o dashboard');
     }
 });
